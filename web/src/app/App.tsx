@@ -1,8 +1,15 @@
-/** 화면 골격. 1차 기능은 이후 커밋에서 채운다. */
+import { KimchiPremiumPage } from '../features/kimchiPremium/KimchiPremiumPage'
+
 export function App() {
   return (
-    <main>
-      <h1>Signalcast</h1>
-    </main>
+    <div className="app">
+      <header className="app-header">
+        <h1 className="app-title">Signalcast</h1>
+        <p className="app-subtitle">업비트·바이낸스 실시간 김치 프리미엄</p>
+      </header>
+      <main className="app-main">
+        <KimchiPremiumPage />
+      </main>
+    </div>
   )
 }

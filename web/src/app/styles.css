@@ -1,0 +1,318 @@
+/* 색은 한국 관례를 따른다: 플러스는 빨강, 마이너스는 파랑. 색만으로 구분하지 않도록 부호도 함께 표시한다. */
+:root {
+  color-scheme: dark;
+  --color-background: #0b0e14;
+  --color-surface: #131823;
+  --color-surface-raised: #1a2130;
+  --color-border: #263042;
+  --color-text: #e6e9ef;
+  --color-text-muted: #8b95a7;
+  --color-positive: #f0616d;
+  --color-negative: #4c8dff;
+  --color-success: #3ccf8e;
+  --color-warning: #f2b84b;
+  --radius: 12px;
+  --font-sans: system-ui, -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  --font-numeric: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+p,
+dl,
+dd {
+  margin: 0;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+.app {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+}
+
+.app-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+  margin-bottom: 20px;
+}
+
+.app-title {
+  font-size: 1.4rem;
+  letter-spacing: -0.01em;
+}
+
+.app-subtitle,
+.muted {
+  color: var(--color-text-muted);
+}
+
+.page {
+  display: grid;
+  gap: 16px;
+}
+
+/* grid 자식이 내용(넓은 표)만큼 늘어나지 않게 해서, 표만 카드 안에서 가로 스크롤되게 한다. */
+.page > * {
+  min-width: 0;
+}
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+
+.card-title {
+  font-size: 1rem;
+  margin-bottom: 12px;
+}
+
+.tone-positive {
+  color: var(--color-positive);
+}
+
+.tone-negative {
+  color: var(--color-negative);
+}
+
+.tone-neutral {
+  color: var(--color-text);
+}
+
+.notice {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--color-surface-raised);
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+.notice-warning {
+  color: var(--color-warning);
+  border: 1px solid color-mix(in srgb, var(--color-warning) 35%, transparent);
+}
+
+.badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  vertical-align: middle;
+}
+
+.badge-warning {
+  color: var(--color-background);
+  background: var(--color-warning);
+}
+
+/* 연결 상태 */
+.connection-status-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.connection-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface);
+  font-size: 0.8125rem;
+}
+
+.connection-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-text-muted);
+}
+
+.connection-open .connection-dot {
+  background: var(--color-success);
+}
+
+.connection-reconnecting .connection-dot,
+.connection-closed .connection-dot {
+  background: var(--color-warning);
+}
+
+.connection-label {
+  color: var(--color-text-muted);
+}
+
+/* 김프 요약 */
+.premium-summary-header {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+.premium-summary-header h2 {
+  font-size: 1.05rem;
+}
+
+.premium-figures {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.premium-figure-label {
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+.premium-figure-value {
+  font-family: var(--font-numeric);
+  font-size: clamp(2.25rem, 7vw, 3.25rem);
+  font-weight: 700;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+}
+
+.premium-figure-secondary .premium-figure-value {
+  font-size: clamp(1.6rem, 5vw, 2.25rem);
+}
+
+.premium-figure-caption {
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+}
+
+.premium-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px 16px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-border);
+}
+
+.premium-details dt {
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+}
+
+.premium-details dd {
+  font-family: var(--font-numeric);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 고정폭 글꼴은 숫자에만 쓴다. 한글 설명은 기본 글꼴로 되돌린다. */
+.premium-details dd .muted {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+}
+
+.premium-help {
+  margin-top: 12px;
+  color: var(--color-text-muted);
+  font-size: 0.8125rem;
+}
+
+/* 코인 목록 */
+.table-scroll {
+  overflow-x: auto;
+}
+
+.premium-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+
+.premium-table th,
+.premium-table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.premium-table thead th {
+  color: var(--color-text-muted);
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.premium-table .numeric {
+  text-align: right;
+  font-family: var(--font-numeric);
+  font-variant-numeric: tabular-nums;
+}
+
+.premium-table .strong {
+  font-weight: 700;
+}
+
+.premium-table tbody tr.selected {
+  background: var(--color-surface-raised);
+}
+
+.asset-button {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.asset-button:focus-visible {
+  outline: 2px solid var(--color-negative);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.asset-id {
+  font-weight: 700;
+}
+
+.asset-name {
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+}
+
+@media (max-width: 640px) {
+  .optional-column {
+    display: none;
+  }
+
+  .card {
+    padding: 16px;
+  }
+}

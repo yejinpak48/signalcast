@@ -48,7 +48,12 @@
 - [x] test: ReconnectingSocket 재연결 상한과 지터 범위 검증
 - [x] feat: ECB 환율 조회 (Frankfurter ECB 제공처 경로와 CORS 확인)
 - [x] feat: 김프 계산과 시세 스토어
-- [ ] feat: 코인 목록과 요약 화면 (BTC, ETH, XRP, SOL, DOGE)
+- [x] feat: 코인 목록과 요약 화면 (BTC, ETH, XRP, SOL, DOGE)
+  - 확인됨: 헤드리스 Chrome에서 업비트·바이낸스 연결(핸드셰이크 101), 5개 코인 값 표시, 콘솔 오류 0건
+- [ ] 6번 남은 일
+  - 모바일(390px) 화면이 잘리던 문제를 CSS로 고쳤지만(`.page > * { min-width: 0 }`), 고친 뒤 화면을 눈으로 다시 확인하지 못함
+  - 표 머리글·"ECB 기준일"에 고정폭 글꼴이 적용되던 문제를 고친 뒤 데스크톱 화면도 다시 확인하지 못함
+  - 확인 방법: `npm run build --workspace web` → `npx vite preview` → 데스크톱 1280px, 모바일 390px 캡처
 - [ ] feat: 김프 추이 차트와 캔들 미리 채우기 (lightweight-charts)
   - 주의: 업비트는 Origin 헤더가 있는 요청(브라우저)을 시세 REST·WebSocket 모두 10초당 1회로 제한한다.
     업비트 캔들을 마켓 6개(코인 5개 + USDT)만큼 받으면 1분 가까이 걸리므로, 요청 순서와 범위를 계획에서 다시 정한다.

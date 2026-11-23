@@ -43,11 +43,13 @@
 ### 1차: 김치 프리미엄 대시보드
 - [x] chore: 모노레포 골격과 strict TS 설정
 - [x] docs: CLAUDE.md, TODO.md
-- [ ] feat: 재연결 WebSocket과 거래소 어댑터
+- [x] feat: 재연결 WebSocket과 거래소 어댑터
 - [ ] feat: ECB 환율 조회 (Frankfurter ECB 제공처 경로와 CORS 확인)
 - [ ] feat: 김프 계산과 시세 스토어
 - [ ] feat: 코인 목록과 요약 화면 (BTC, ETH, XRP, SOL, DOGE)
 - [ ] feat: 김프 추이 차트와 캔들 미리 채우기 (lightweight-charts)
+  - 주의: 업비트는 Origin 헤더가 있는 요청(브라우저)을 시세 REST·WebSocket 모두 10초당 1회로 제한한다.
+    업비트 캔들을 마켓 6개(코인 5개 + USDT)만큼 받으면 1분 가까이 걸리므로, 요청 순서와 범위를 계획에서 다시 정한다.
 - [ ] feat: 김프 알림
 - [ ] feat: 공통 푸터 (면책 문구, 시세·환율·차트 출처)
 - [ ] 1차 마무리: 화면 문구에서 매매 표현 검사, 사용자 확인 후 push

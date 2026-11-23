@@ -44,7 +44,9 @@
 - [x] chore: 모노레포 골격과 strict TS 설정
 - [x] docs: CLAUDE.md, TODO.md
 - [x] feat: 재연결 WebSocket과 거래소 어댑터
-- [ ] feat: ECB 환율 조회 (Frankfurter ECB 제공처 경로와 CORS 확인)
+- [x] fix: 재연결 대기 시간이 지터를 적용해도 상한을 넘지 않게
+- [x] test: ReconnectingSocket 재연결 상한과 지터 범위 검증
+- [x] feat: ECB 환율 조회 (Frankfurter ECB 제공처 경로와 CORS 확인)
 - [ ] feat: 김프 계산과 시세 스토어
 - [ ] feat: 코인 목록과 요약 화면 (BTC, ETH, XRP, SOL, DOGE)
 - [ ] feat: 김프 추이 차트와 캔들 미리 채우기 (lightweight-charts)

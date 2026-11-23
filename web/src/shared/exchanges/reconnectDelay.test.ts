@@ -27,6 +27,16 @@ describe('calculateReconnectDelayMs', () => {
     expect(calculateReconnectDelayMs(1, options, 0.999_999)).toBe(1_250)
   })
 
+  it('지터를 적용해도 상한을 넘지 않는다', () => {
+    expect(calculateReconnectDelayMs(10, options, 0.999_999)).toBe(30_000)
+    expect(calculateReconnectDelayMs(10, options, 0)).toBe(22_500)
+    for (let failedAttemptCount = 1; failedAttemptCount <= 20; failedAttemptCount += 1) {
+      for (const randomValue of [0, 0.25, 0.5, 0.75, 0.999_999]) {
+        expect(calculateReconnectDelayMs(failedAttemptCount, options, randomValue)).toBeLessThanOrEqual(30_000)
+      }
+    }
+  })
+
   it('지터를 적용해도 최소 대기 시간보다 짧아지지 않는다', () => {
     const upbitLikeOptions = { ...options, baseDelayMs: 10_000, minimumDelayMs: 10_000 }
     expect(calculateReconnectDelayMs(1, upbitLikeOptions, 0)).toBe(10_000)

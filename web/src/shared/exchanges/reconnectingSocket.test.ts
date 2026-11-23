@@ -127,6 +127,75 @@ describe('ReconnectingSocket', () => {
     reconnectingSocket.stop()
   })
 
+  it('계속 실패해도 실제 재연결 대기 시간은 상한(30초)에서 멈춘다', () => {
+    const { reconnectingSocket, createdSockets, latestSocket, statuses } = setUpSocket()
+    reconnectingSocket.start()
+    const observedDelaysMs: number[] = []
+
+    for (let failureIndex = 0; failureIndex < 8; failureIndex += 1) {
+      latestSocket().simulateClose()
+      const nextRetryAt = statuses.at(-1)?.nextRetryAt
+      if (nextRetryAt == null) throw new Error('재연결 예정 시각이 없습니다')
+      const delayMs = nextRetryAt - Date.now()
+      observedDelaysMs.push(delayMs)
+
+      // 예정 시각 직전에는 새 연결이 없고, 정확히 그 시각에 새 연결이 생긴다.
+      const socketCountBefore = createdSockets.length
+      vi.advanceTimersByTime(delayMs - 1)
+      expect(createdSockets).toHaveLength(socketCountBefore)
+      vi.advanceTimersByTime(1)
+      expect(createdSockets).toHaveLength(socketCountBefore + 1)
+    }
+
+    expect(observedDelaysMs).toEqual([1_000, 2_000, 4_000, 8_000, 16_000, 30_000, 30_000, 30_000])
+    reconnectingSocket.stop()
+  })
+
+  it('지터가 가장 클 때도 실제 대기 시간은 상한을 넘지 않는다', () => {
+    const { reconnectingSocket, latestSocket, statuses } = setUpSocket({ getRandomValue: () => 0.999_999 })
+    reconnectingSocket.start()
+    const observedDelaysMs: number[] = []
+
+    for (let failureIndex = 0; failureIndex < 8; failureIndex += 1) {
+      latestSocket().simulateClose()
+      const delayMs = (statuses.at(-1)?.nextRetryAt ?? Number.NaN) - Date.now()
+      observedDelaysMs.push(delayMs)
+      vi.advanceTimersByTime(delayMs)
+    }
+
+    expect(observedDelaysMs[0]).toBe(1_250)
+    expect(Math.max(...observedDelaysMs)).toBe(30_000)
+    reconnectingSocket.stop()
+  })
+
+  it('실제 대기 시간은 지터 범위(±25%) 안에 있다', () => {
+    for (const [randomValue, expectedDelayMs] of [
+      [0, 750],
+      [0.5, 1_000],
+      [0.999_999, 1_250],
+    ] as const) {
+      const { reconnectingSocket, latestSocket, statuses } = setUpSocket({ getRandomValue: () => randomValue })
+      reconnectingSocket.start()
+      latestSocket().simulateClose()
+      expect((statuses.at(-1)?.nextRetryAt ?? Number.NaN) - Date.now()).toBe(expectedDelayMs)
+      reconnectingSocket.stop()
+    }
+  })
+
+  it('최소 대기 시간이 있으면 지터가 가장 작을 때도 그보다 빨리 다시 연결하지 않는다', () => {
+    const { reconnectingSocket, createdSockets, latestSocket } = setUpSocket({
+      reconnectDelay: { baseDelayMs: 10_000, maxDelayMs: 60_000, jitterRatio: 0.25, minimumDelayMs: 10_000 },
+      getRandomValue: () => 0,
+    })
+    reconnectingSocket.start()
+    latestSocket().simulateClose()
+    vi.advanceTimersByTime(9_999)
+    expect(createdSockets).toHaveLength(1)
+    vi.advanceTimersByTime(1)
+    expect(createdSockets).toHaveLength(2)
+    reconnectingSocket.stop()
+  })
+
   it('데이터가 일정 시간 없으면 죽은 연결로 보고 다시 연결한다', () => {
     const { reconnectingSocket, createdSockets, latestSocket, statuses } = setUpSocket()
     reconnectingSocket.start()
